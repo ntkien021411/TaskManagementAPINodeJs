@@ -9,26 +9,9 @@ const port = process.env.PORT;
 const database = require("./config/database");
 database.connect();
 
-const Task = require("./models/task.model");
+const routesApiVer1 = require("./api/v1/routes/index.route")
+routesApiVer1(app);
 
-app.get("/tasks", async (req, res) => {
-  const task = await Task.find({
-    deleted: false,
-  });
-  res.json(task);
-});
-app.get("/tasks/detail/:id", async (req, res) => {
-  const id = req.params.id;
-  try {
-    const task = await Task.find({
-      _id: id,
-      deleted: false,
-    });
-    res.json(task);
-  } catch (error) {
-    res.json("fail");
-  }
-});
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
