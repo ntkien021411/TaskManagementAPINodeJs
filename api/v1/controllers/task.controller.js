@@ -103,6 +103,7 @@ module.exports.changeMulti = async (req, res) => {
           message: "Cập nhật trạng thái thành công!",
         });
         break;
+        
       default:
         res.json({
           code: 400,
@@ -136,9 +137,7 @@ module.exports.create = async (req, res) => {
   }
 };
 
-
-
-//[POST] /api/v1/tasks/edit/:id
+//[PATCH] /api/v1/tasks/edit/:id
 module.exports.edit = async (req, res) => {
   try {
     const id = req.params.id;
@@ -156,6 +155,29 @@ module.exports.edit = async (req, res) => {
     res.json({
       code: 400,
       message: "Cập nhật thất bại!",
+    });
+  }
+};
+
+
+//[DELETE] /api/v1/tasks/delete/:id
+module.exports.delete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Task.updateOne({
+      _id : id
+    },{
+      deleted:true,
+      deletedAt:new Date()
+    });
+    res.json({
+      code: 200,
+      message: "Xóa công việc thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Không tồn tại!",
     });
   }
 };
