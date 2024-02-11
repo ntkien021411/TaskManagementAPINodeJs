@@ -1,17 +1,24 @@
 const Task = require("../models/task.model");
 const pagination = require("../../../helpers/pagination");
-//Qeury/Sort/Pagination
+const search = require("../../../helpers/search");
+//Filter/Sort/Pagination/Search
 //[GET] /api/v1/tasks
 //[GET] /api/v1/tasks?status=...&sortKey=title&sortValue=asc
 //[GET] /api/v1/tasks?page=1&limit=3
-
+//[GET] /api/v1/tasks?keyword=...
 module.exports.index = async (req, res) => {
   const find = {
     deleted: false,
   };
-  //Filter
+  //Filter Status:Trạng thái
   if (req.query.status) {
     find.status = req.query.status;
+  }
+
+  //Search Title
+  let objectSearch = search(req.query);
+  if (req.query.keyword) {
+    find.title = objectSearch.regex;
   }
 
   //Total Page
@@ -29,6 +36,7 @@ module.exports.index = async (req, res) => {
     sort[req.query.sortKey] = req.query.sortValue;
   }
 
+  //Result
   const task = await Task.find(find)
     .sort(sort)
     .limit(objectPagination.limitItem)
