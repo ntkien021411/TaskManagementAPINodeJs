@@ -1,11 +1,16 @@
 const express = require("express");
 const app = express();
 
+
 //CORS
 const cors = require('cors');
 app.use(cors());
 
-
+//Cookie
+var cookieParser = require('cookie-parser')
+// const session = require('express-session');
+app.use(cookieParser("keyboard cat"));
+// app.use(session({ cookie: { maxAge: 60000 } }));
 //Body-Parser
 var bodyParser = require('body-parser')
 // parse application/json
