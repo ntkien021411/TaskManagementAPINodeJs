@@ -26,11 +26,17 @@ module.exports.registerAccount = (req, res, next) => {
 
 module.exports.loginAccount = (req, res, next) => {
   if (!req.body.email) {
-    res.redirect(`back`);
+    res.json({
+      code: 400,
+      message: "Vui lòng nhập email!",
+    });
     return;
   }
   if (!req.body.password) {
-    res.redirect(`back`);
+    res.json({
+      code: 400,
+      message: "Vui lòng nhập mật khẩu!",
+    });
     return;
   }
   // else{

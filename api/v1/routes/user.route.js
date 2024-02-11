@@ -5,6 +5,8 @@ const controller = require("../controllers/user.controller");
 const validate = require("../../../validates/client/user.validate");
 router.post("/register",validate.registerAccount,controller.register);
 
+router.post("/login",validate.loginAccount,controller.login);
+
 // router.get("/detail/:id", controller.detail);
 
 // router.patch("/change-status/:id", controller.changeStatus);
