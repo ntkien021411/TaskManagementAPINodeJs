@@ -118,7 +118,7 @@ module.exports.changeMulti = async (req, res) => {
   }
 };
 
-//[PATCH] /api/v1/tasks/change-multi
+//[POST] /api/v1/tasks/create
 module.exports.create = async (req, res) => {
   try {
     const task = new Task(req.body);
