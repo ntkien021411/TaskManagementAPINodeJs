@@ -139,7 +139,8 @@ module.exports.otpPassword = async (req, res) => {
 
 //[POST] /api/v1/users/password/otp
 module.exports.resetPassword = async (req, res) => {
-  const token = req.body.token;
+  const token = req.body.token; // dùng ghi xác nhận OTP thành công và trả về json
+  //   const token = req.cookies.token; // dùng ghi set cookie bên server
   const password = req.body.password;
 
   const user = await User.findOne({
@@ -155,7 +156,7 @@ module.exports.resetPassword = async (req, res) => {
   }
   await User.updateOne(
     {
-        token: token,
+      token: token,
     },
     {
       password: md5(password),
