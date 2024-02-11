@@ -8,7 +8,7 @@ const search = require("../../../helpers/search");
 //[GET] /api/v1/tasks?keyword=...
 module.exports.index = async (req, res) => {
   const find = {
-    deleted: false,
+    // deleted: false,
   };
   //Filter Status:Trạng thái
   if (req.query.status) {
@@ -55,7 +55,7 @@ module.exports.detail = async (req, res) => {
     });
     res.json(task);
   } catch (error) {
-    res.json("fail");
+    res.json("Không tìm thấy!");
   }
 };
 
@@ -66,10 +66,10 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.body.status;
     await Task.updateOne(
       {
-        _id: id
+        _id: id,
       },
       {
-        status: status
+        status: status,
       }
     );
     res.json({
@@ -87,15 +87,15 @@ module.exports.changeStatus = async (req, res) => {
 //[PATCH] /api/v1/tasks/change-multi
 module.exports.changeMulti = async (req, res) => {
   try {
-    const {ids,key,value} = req.body;
+    const { ids, key, value } = req.body;
     switch (key) {
       case "status":
         await Task.updateMany(
           {
-            _id: {$in:ids}
+            _id: { $in: ids },
           },
           {
-            status: value
+            status: value,
           }
         );
         res.json({
@@ -103,7 +103,22 @@ module.exports.changeMulti = async (req, res) => {
           message: "Cập nhật trạng thái thành công!",
         });
         break;
-        
+      case "delete":
+        await Task.updateMany(
+          {
+            _id: { $in: ids },
+          },
+          {
+            deleted: true,
+            deletedAt: new Date(),
+          }
+        );
+        res.json({
+          code: 200,
+          message: "Xóa nhiều nhiệm vụ thành công!",
+        });
+        break;
+
       default:
         res.json({
           code: 400,
@@ -127,7 +142,7 @@ module.exports.create = async (req, res) => {
     res.json({
       code: 200,
       message: "Tạo mới thành công!",
-      data : data
+      data: data,
     });
   } catch (error) {
     res.json({
@@ -143,13 +158,13 @@ module.exports.edit = async (req, res) => {
     const id = req.params.id;
     await Task.updateOne(
       {
-        _id: id
+        _id: id,
       },
-     req.body
+      req.body
     );
     res.json({
       code: 200,
-      message: "Cập nhật công việc thành công!",
+      message: "Cập nhật nhiệm vụ thành công!",
     });
   } catch (error) {
     res.json({
@@ -159,20 +174,22 @@ module.exports.edit = async (req, res) => {
   }
 };
 
-
 //[DELETE] /api/v1/tasks/delete/:id
 module.exports.delete = async (req, res) => {
   try {
     const id = req.params.id;
-    await Task.updateOne({
-      _id : id
-    },{
-      deleted:true,
-      deletedAt:new Date()
-    });
+    await Task.updateOne(
+      {
+        _id: id,
+      },
+      {
+        deleted: true,
+        deletedAt: new Date(),
+      }
+    );
     res.json({
       code: 200,
-      message: "Xóa công việc thành công!",
+      message: "Xóa thành công!",
     });
   } catch (error) {
     res.json({
