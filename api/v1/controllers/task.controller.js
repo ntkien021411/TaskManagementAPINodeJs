@@ -8,7 +8,11 @@ const search = require("../../../helpers/search");
 //[GET] /api/v1/tasks?keyword=...
 module.exports.index = async (req, res) => {
   const find = {
-    // deleted: false,
+    $or : [
+      {createdBy : req.user.id},
+      {listUser : req.user.id}
+    ],
+    deleted: false,
   };
   //Filter Status:Trạng thái
   if (req.query.status) {
