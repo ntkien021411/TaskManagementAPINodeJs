@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
-const generateToken = require("../../../helpers/generateToken");
+
 //Tạo model
 const userSchema = new mongoose.Schema({
     fullName:String,
     email:String,
     password:String,
-    token : {
-        type:String,
-        default : generateToken.generateRandomString(50)
-    },
+    token : String,
     phone : String,
     avatar : String,
     deleted:{
